@@ -1,6 +1,5 @@
 #! usr/bin/env python3
 
-import colorama
 from Deck import Deck
 from Card import Card
 from Hand import Hand
@@ -65,6 +64,8 @@ def get_frequencies(verbose=True):
             scores[Hand(curr_cards, draw).get_score()] += 1
 
     if verbose:
+        # Clear the screen and move back to position (0, 0)
+        print("\033[2J")
         # Print the scores frequency list
         print(scores)
         # Print the amount of time that it took to explore
@@ -75,7 +76,8 @@ def get_frequencies(verbose=True):
 
 
 def main():
-    true_frequencies = [1009008, 99792, 2813796, 505008, 2855676, 697508, 1800268, 751324, 1137236, 361224, 388740, 51680, 317340, 19656, 90100, 9168, 58248, 11196, 2708, 0, 8068, 2496, 444, 356, 3680, 0, 0, 0, 76, 4]
+    with open("./true_scores.txt", "r") as f:
+        true_frequencies = [int(line) for line in f.readlines()]
     mismatch = False
     for i, (m, t) in enumerate(zip(get_frequencies(), true_frequencies)):
         if m != t:
@@ -83,7 +85,7 @@ def main():
             print(f"║  Incorrect response for score {i}")
             print(f"╚════╣ Should be {t:<8} -  found {m:<8}\n")
     if not mismatch:
-        print("Program accurately reproduces results")
+        print(Fore.LIGHTGREEN_EX + "Program accurately reproduces results" + Fore.RESET)
 
 
 if __name__ == "__main__":
