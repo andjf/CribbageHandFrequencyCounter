@@ -1,4 +1,10 @@
 #! usr/bin/env python3
+"""
+Usage: 
+>> python3 ./main.py
+   or, for faster run times:
+>> pypy3 ./main.py
+"""
 
 from Deck import Deck
 from Card import Card
