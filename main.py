@@ -11,12 +11,6 @@ from Card import Card
 from Hand import Hand
 from itertools import combinations as C
 from time import time
-from colorama import Fore
-
-
-def pos(x, y):
-    # Sets the position of the cursor in the terminal
-    return f"\x1b[{y};{x}H"
 
 
 def list_without(i):
@@ -29,8 +23,7 @@ def get_frequencies(verbose=True):
 
     # Clear the screen and move to (0, 0)
     if verbose:
-        print("\033[2J")
-        print(Fore.GREEN + f"{pos(0, 0)}Counting All Possible Cribbage Hands:" + Fore.RESET)
+        print("Counting All Possible Cribbage Hands:")
 
     # Get the start time of the loop
     start_time = time()
@@ -51,17 +44,12 @@ def get_frequencies(verbose=True):
 
         # Inform the user on the current status of the loop
         if verbose:
-            print(Fore.YELLOW + f"{pos(0, 2)}Currently Calculating: {draw} ({draw_index + 1}/52)" + Fore.RESET)
+            print(f"Currently Calculating: {draw} ({draw_index + 1}/52)")
 
         # Loop through each possible combination of the deck
         # such that the hand comes from the deck that doesn't
         # contain the current draw card (choose 4 cards) (C(51, 4) = 249,900)
-        for hand_index, indices in enumerate(C(list_without(draw_index), 4)):
-
-            # Inform user about progress of current scoring with loading bar
-            if verbose and hand_index % (249900 // bar_width) == 0:
-                curr_bar_width = int((hand_index / 249900) * bar_width)
-                print(Fore.LIGHTYELLOW_EX + f"{pos(0, 3)}|{'#'*curr_bar_width}{' '*(bar_width-curr_bar_width - 1)}|" + Fore.RESET)
+        for indices in C(list_without(draw_index), 4):
 
             # Get the current cards that should be a part of the hand
             curr_cards = [deck.cards[i] for i in indices]
@@ -70,8 +58,6 @@ def get_frequencies(verbose=True):
             scores[Hand(curr_cards, draw).get_score()] += 1
 
     if verbose:
-        # Clear the screen and move back to position (0, 0)
-        print("\033[2J")
         # Print the scores frequency list
         print(scores)
         # Print the amount of time that it took to explore
@@ -91,7 +77,7 @@ def main():
             print(f"║  Incorrect response for score {i}")
             print(f"╚════╣ Should be {t:<8} -  found {m:<8}\n")
     if not mismatch:
-        print(Fore.LIGHTGREEN_EX + "Program accurately reproduces results" + Fore.RESET)
+        print("Program accurately reproduces results")
 
 
 if __name__ == "__main__":
